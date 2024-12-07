@@ -1,0 +1,101 @@
+﻿{
+   "CodeGenerationMode": 1,
+   "ContextClassName": "ConfugurationManagerDbContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": "Data",
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "ConfigurationWebApiService",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[ColourSchemaConfiguration]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ColourSchemas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Configurations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EventSubscription]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FontConfiguration]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Fonts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[HotKeyConfigurations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Hotkeys]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SubscriptionEventSubscription]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Subscriptions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserConfiguration]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Users]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserSubscriptions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WindowLocationConfiguration]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WindowLocations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Windows]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "(localdb)\\MSSQLLocalDB.ConfugurationManagerDb",
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoConstructor": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": true,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": false
+}
