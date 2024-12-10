@@ -4,58 +4,40 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 
-#nullable enable
+namespace ConfigurationWebApiService.Models;
 
-namespace ConfigurationWebApiService.Models
+public partial class Users
 {
-    public partial class Users
-    {
-        public Users(Users user, [CallerMemberName] string caller ="")
-        {
-            Id = user.Id == Guid.Empty ? Guid.NewGuid() : user.Id;
-            CreateDate = user.CreateDate == DateTime.MinValue ? DateTime.Now : user.CreateDate;
-            IsActive = caller.Contains("Add") ? true : user.IsActive;
-            UpdateDate = caller.Contains("Add") ? null : DateTime.Now;
-            LastName = user.LastName;
-            FirstName = user.FirstName;
-            MiddleName= user.MiddleName;
-            Login=user.Login;
-            PasswordHash = user.PasswordHash;//тут надо функцию
-            UserConfiguration = new HashSet<UserConfiguration>();
-            UserSubscriptions = new HashSet<UserSubscriptions>();
-        }
-        public Users()
-        {
-            UserConfiguration = new HashSet<UserConfiguration>();
-            UserSubscriptions = new HashSet<UserSubscriptions>();
-        }
+    [Key]
+    public Guid Id { get; set; }
 
-        [Key]
-        public Guid Id { get; set; }
-        [Required]
-        [StringLength(80)]
-        public string LastName { get; set; } = default!;
-        [Required]
-        [StringLength(80)]
-        public string FirstName { get; set; } = default!;
-        [StringLength(80)]
-        public string? MiddleName { get; set; }
-        [Required]
-        [StringLength(10)]
-        public string Login { get; set; } = default!;
-        //[Required]
-        public string PasswordHash { get; set; } = default!;
-        [Column(TypeName = "datetime")]
-        public DateTime CreateDate { get; internal set; }
-        [Column(TypeName = "datetime")]
-        public DateTime? UpdateDate { get; internal set; }
-        public bool IsActive { get; internal set; }
+    [StringLength(80)]
+    public string LastName { get; set; } = null!;
 
-        [InverseProperty("User")]
-        public virtual ICollection<UserConfiguration> UserConfiguration { get; internal set; }
-        [InverseProperty("User")]
-        public virtual ICollection<UserSubscriptions> UserSubscriptions { get; internal set; }
-    }
+    [StringLength(80)]
+    public string FirstName { get; set; } = null!;
+
+    [StringLength(80)]
+    public string? MiddleName { get; set; }
+
+    [StringLength(10)]
+    public string Login { get; set; } = null!;
+
+    public string PasswordHash { get; set; } = null!;
+
+    [Column(TypeName = "datetime")]
+    public DateTime CreateDate { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? UpdateDate { get; set; }
+
+    public bool IsActive { get; set; }
+
+    [InverseProperty("User")]
+    public virtual ICollection<UserConfiguration> UserConfiguration { get; set; } = new List<UserConfiguration>();
+
+    [InverseProperty("User")]
+    public virtual ICollection<UserSubscriptions> UserSubscriptions { get; set; } = new List<UserSubscriptions>();
 }

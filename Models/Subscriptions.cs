@@ -4,44 +4,29 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 
-#nullable enable
+namespace ConfigurationWebApiService.Models;
 
-namespace ConfigurationWebApiService.Models
+public partial class Subscriptions
 {
-    public partial class Subscriptions
-    {
-        public Subscriptions(Subscriptions subscription, [CallerMemberName] string caller = "")
-        {
-            Id = subscription.Id == Guid.Empty ? Guid.NewGuid() : subscription.Id;
-            CreateDate = subscription.CreateDate == DateTime.MinValue ? DateTime.Now : subscription.CreateDate;
-            UpdateDate = caller.Contains("Add") ? null : DateTime.Now;
-            Title = subscription.Title;
-            Description = subscription.Description;
-            SubscriptionEventSubscription = new HashSet<SubscriptionEventSubscription>();
-            UserSubscriptions = new HashSet<UserSubscriptions>();
-        }
-        public Subscriptions()
-        {
-            SubscriptionEventSubscription = new HashSet<SubscriptionEventSubscription>();
-            UserSubscriptions = new HashSet<UserSubscriptions>();
-        }
+    [Key]
+    public Guid Id { get; set; }
 
-        [Key]
-        public Guid Id { get; set; }
-        [Required]
-        [StringLength(50)]
-        public string Title { get; set; } = default!;
-        public string? Description { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime CreateDate { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime? UpdateDate { get; set; }
+    [StringLength(50)]
+    public string Title { get; set; } = null!;
 
-        [InverseProperty("Subscription")]
-        public virtual ICollection<SubscriptionEventSubscription> SubscriptionEventSubscription { get; set; }
-        [InverseProperty("Subscription")]
-        public virtual ICollection<UserSubscriptions> UserSubscriptions { get; set; }
-    }
+    public string? Description { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime CreateDate { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? UpdateDate { get; set; }
+
+    [InverseProperty("Subscription")]
+    public virtual ICollection<SubscriptionEventSubscription> SubscriptionEventSubscription { get; set; } = new List<SubscriptionEventSubscription>();
+
+    [InverseProperty("Subscription")]
+    public virtual ICollection<UserSubscriptions> UserSubscriptions { get; set; } = new List<UserSubscriptions>();
 }

@@ -4,7 +4,6 @@
     {
         public EntityChangedEventArgs()
         {
-            
         }
         public EntityChangedEventArgs(T entity, EntityAction entityAction, string notes)
         {
@@ -12,9 +11,9 @@
             Action = entityAction;
             Notes = notes;
         }
-        public T Entity { get; set; }
+        public T? Entity { get; set; }
         public EntityAction Action { get; set; }
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
     }
     public enum EntityAction
     {

@@ -4,33 +4,24 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-#nullable enable
+namespace ConfigurationWebApiService.Models;
 
-namespace ConfigurationWebApiService.Models
+public partial class FontConfiguration
 {
-    public partial class FontConfiguration
-    {
-        public FontConfiguration()
-        {
-            
-        }
-        public FontConfiguration(FontConfiguration fontConfiguration)
-        {
-            Id = fontConfiguration.Id == Guid.Empty ? Guid.NewGuid() : fontConfiguration.Id;
-            FontId = fontConfiguration.FontId;
-            ConfigurationId = fontConfiguration.ConfigurationId;
-        }
-        [Key]
-        public Guid Id { get; set; }
-        public Guid FontId { get; set; }
-        public Guid ConfigurationId { get; set; }
+    [Key]
+    public Guid Id { get; set; }
 
-        [ForeignKey(nameof(ConfigurationId))]
-        [InverseProperty(nameof(Configurations.FontConfiguration))]
-        public virtual Configurations Configuration { get; set; } = default!;
-        [ForeignKey(nameof(FontId))]
-        [InverseProperty(nameof(Fonts.FontConfiguration))]
-        public virtual Fonts Font { get; set; } = default!;
-    }
+    public Guid FontId { get; set; }
+
+    public Guid ConfigurationId { get; set; }
+
+    [ForeignKey("ConfigurationId")]
+    [InverseProperty("FontConfiguration")]
+    public virtual Configurations Configuration { get; set; } = null!;
+
+    [ForeignKey("FontId")]
+    [InverseProperty("FontConfiguration")]
+    public virtual Fonts Font { get; set; } = null!;
 }

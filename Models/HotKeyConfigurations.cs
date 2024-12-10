@@ -4,34 +4,24 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static System.Net.Mime.MediaTypeNames;
+using Microsoft.EntityFrameworkCore;
 
-#nullable enable
+namespace ConfigurationWebApiService.Models;
 
-namespace ConfigurationWebApiService.Models
-{    
-    public partial class HotKeyConfigurations
-    {
-        public HotKeyConfigurations()
-        {
-            
-        }
-        public HotKeyConfigurations(HotKeyConfigurations hotKeyConfiguration)
-        {
-            Id = hotKeyConfiguration.Id == Guid.Empty ? Guid.NewGuid() : hotKeyConfiguration.Id;
-            HotKeyId = hotKeyConfiguration.HotKeyId;
-            ConfigurationId = hotKeyConfiguration.ConfigurationId;
-        }
-        [Key]
-        public Guid Id { get; internal set; }
-        public Guid HotKeyId { get; set; }
-        public Guid ConfigurationId { get; set; }
+public partial class HotKeyConfigurations
+{
+    [Key]
+    public Guid Id { get; set; }
 
-        [ForeignKey(nameof(ConfigurationId))]
-        [InverseProperty(nameof(Configurations.HotKeyConfigurations))]
-        public virtual Configurations Configuration { get; set; } = default!;
-        [ForeignKey(nameof(HotKeyId))]
-        [InverseProperty(nameof(Hotkeys.HotKeyConfigurations))]
-        public virtual Hotkeys HotKey { get; set; } = default!;
-    }
+    public Guid HotKeyId { get; set; }
+
+    public Guid ConfigurationId { get; set; }
+
+    [ForeignKey("ConfigurationId")]
+    [InverseProperty("HotKeyConfigurations")]
+    public virtual Configurations Configuration { get; set; } = null!;
+
+    [ForeignKey("HotKeyId")]
+    [InverseProperty("HotKeyConfigurations")]
+    public virtual Hotkeys HotKey { get; set; } = null!;
 }

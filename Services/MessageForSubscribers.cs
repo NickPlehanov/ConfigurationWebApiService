@@ -4,7 +4,7 @@ namespace ConfigurationWebApiService.Services
 {
     public class MessageForSubscribers : Hub<IMessageForSubscribers>
     {
-        public async Task Send(string message, IReadOnlyList<string> clientIds)
+        public async Task Send(string message, string additionMessage, IReadOnlyList<string> clientIds)
         {
             await this.Clients.Clients(clientIds).SendAsync(message);
         }

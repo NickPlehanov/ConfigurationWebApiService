@@ -4,39 +4,29 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 
-#nullable enable
+namespace ConfigurationWebApiService.Models;
 
-namespace ConfigurationWebApiService.Models
+public partial class EventSubscription
 {
-    public partial class EventSubscription
-    {
-        public EventSubscription(EventSubscription es, [CallerMemberName] string caller = "")
-        {
-            Id = es.Id == Guid.Empty ? Guid.NewGuid() : es.Id;
-            CreateDate = es.CreateDate == DateTime.MinValue ? DateTime.Now : es.CreateDate;
-            UpdateDate = caller.Contains("Add") ? null : DateTime.Now;
-            Title = es.Title;
-            Description = es.Description;
-        }
-        public EventSubscription()
-        {
-            SubscriptionEventSubscription = new HashSet<SubscriptionEventSubscription>();
-        }
+    [Key]
+    public Guid Id { get; set; }
 
-        [Key]
-        public Guid Id { get; internal set; }
-        [Required]
-        [StringLength(50)]
-        public string Title { get; set; } = default!;
-        public string? Description { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime? CreateDate { get; internal set; }
-        [Column(TypeName = "datetime")]
-        public DateTime? UpdateDate { get; internal set; }
+    [StringLength(50)]
+    public string Title { get; set; } = null!;
 
-        [InverseProperty("EventSubscription")]
-        public virtual ICollection<SubscriptionEventSubscription> SubscriptionEventSubscription { get; set; }
-    }
+    public string? Description { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? CreateDate { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? UpdateDate { get; set; }
+
+    [InverseProperty("EventSubscription")]
+    public virtual ICollection<SubscriptionEventSubscription> SubscriptionEventSubscription { get; set; } = new List<SubscriptionEventSubscription>();
+
+    [InverseProperty("EventSubscription")]
+    public virtual ICollection<UserTrackingObjectEventSubscription> UserTrackingObjectEventSubscription { get; set; } = new List<UserTrackingObjectEventSubscription>();
 }

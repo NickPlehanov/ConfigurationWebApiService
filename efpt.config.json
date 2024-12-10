@@ -1,8 +1,7 @@
 ﻿{
-   "CodeGenerationMode": 1,
+   "CodeGenerationMode": 4,
    "ContextClassName": "ConfugurationManagerDbContext",
    "ContextNamespace": null,
-   "DefaultDacpacSchema": null,
    "FilterSchemas": false,
    "IncludeConnectionString": true,
    "ModelNamespace": null,
@@ -13,6 +12,7 @@
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
    "Tables": [
       {
          "Name": "[dbo].[ColourSchemaConfiguration]",
@@ -67,6 +67,14 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[UserTrackingObject]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserTrackingObjectEventSubscription]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[WindowLocationConfiguration]",
          "ObjectType": 0
       },
@@ -79,23 +87,30 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "(localdb)\\MSSQLLocalDB.ConfugurationManagerDb",
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": false,
    "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
    "UseFluentApiOnly": false,
    "UseHandleBars": false,
    "UseHierarchyId": false,
    "UseInflector": false,
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": false,
-   "UseNoConstructor": false,
    "UseNoDefaultConstructor": false,
    "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": true,
+   "UsePrefixNavigationNaming": false,
    "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
    "UseSpatial": false,
-   "UseT4": false
+   "UseT4": false,
+   "UseT4Split": false
 }

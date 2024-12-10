@@ -8,20 +8,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationWebApiService.Models;
 
-public partial class SubscriptionEventSubscription
+public partial class UserTrackingObjectEventSubscription
 {
     [Key]
     public Guid Id { get; set; }
 
-    public Guid SubscriptionId { get; set; }
+    public Guid UserTrackingObjectId { get; set; }
 
     public Guid EventSubscriptionId { get; set; }
 
     [ForeignKey("EventSubscriptionId")]
-    [InverseProperty("SubscriptionEventSubscription")]
+    [InverseProperty("UserTrackingObjectEventSubscription")]
     public virtual EventSubscription EventSubscription { get; set; } = null!;
 
-    [ForeignKey("SubscriptionId")]
-    [InverseProperty("SubscriptionEventSubscription")]
-    public virtual Subscriptions Subscription { get; set; } = null!;
+    [ForeignKey("UserTrackingObjectId")]
+    [InverseProperty("UserTrackingObjectEventSubscription")]
+    public virtual UserTrackingObject UserTrackingObject { get; set; } = null!;
 }

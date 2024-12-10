@@ -4,33 +4,24 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-#nullable enable
+namespace ConfigurationWebApiService.Models;
 
-namespace ConfigurationWebApiService.Models
+public partial class WindowLocationConfiguration
 {
-    public partial class WindowLocationConfiguration
-    {
-        public WindowLocationConfiguration(WindowLocationConfiguration wlc)
-        {
-            Id = wlc.Id == Guid.Empty ? Guid.NewGuid() : wlc.Id;
-            WindowLocationId = wlc.WindowLocationId;
-            ConfigurationId = wlc.ConfigurationId;
-        }
-        public WindowLocationConfiguration()
-        {
-            
-        }
-        [Key]
-        public Guid Id { get; set; }
-        public Guid? WindowLocationId { get; set; }
-        public Guid ConfigurationId { get; set; }
+    [Key]
+    public Guid Id { get; set; }
 
-        [ForeignKey(nameof(ConfigurationId))]
-        [InverseProperty(nameof(Configurations.WindowLocationConfiguration))]
-        public virtual Configurations Configuration { get; set; } = default!;
-        [ForeignKey(nameof(WindowLocationId))]
-        [InverseProperty(nameof(Fonts.WindowLocationConfiguration))]
-        public virtual Fonts? WindowLocation { get; set; }
-    }
+    public Guid? WindowLocationId { get; set; }
+
+    public Guid ConfigurationId { get; set; }
+
+    [ForeignKey("ConfigurationId")]
+    [InverseProperty("WindowLocationConfiguration")]
+    public virtual Configurations Configuration { get; set; } = null!;
+
+    [ForeignKey("WindowLocationId")]
+    [InverseProperty("WindowLocationConfiguration")]
+    public virtual Fonts? WindowLocation { get; set; }
 }

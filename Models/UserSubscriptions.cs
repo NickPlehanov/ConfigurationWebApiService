@@ -4,51 +4,40 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 
-#nullable enable
+namespace ConfigurationWebApiService.Models;
 
-namespace ConfigurationWebApiService.Models
+public partial class UserSubscriptions
 {
-    public partial class UserSubscriptions
-    {
-        public UserSubscriptions(UserSubscriptions userSubscriptions, [CallerMemberName] string caller = "")
-        {
-            Id = userSubscriptions.Id == Guid.Empty ? Guid.NewGuid() : userSubscriptions.Id;
-            CreateDate = userSubscriptions.CreateDate == DateTime.MinValue ? DateTime.Now : userSubscriptions.CreateDate;
-            IsActive = caller.Contains("Add") ? true : userSubscriptions.IsActive;
-            StartDate = caller.Contains("Add") ? DateTime.Now : userSubscriptions.StartDate;
-            EndDate = caller.Contains("Add") ? DateTime.Now: userSubscriptions.EndDate;
-            Title = userSubscriptions.Title;
-            Description = userSubscriptions.Description;
-            UserId = userSubscriptions.UserId;
-            SubscriptionId  = userSubscriptions.SubscriptionId;
-        }
-        public UserSubscriptions()
-        {
-            
-        }
-        [Key]
-        public Guid Id { get; internal set; }
-        [Required]
-        [StringLength(50)]
-        public string Title { get; set; } = default!;
-        public string? Description { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime CreateDate { get; internal set; }
-        [Column(TypeName = "datetime")]
-        public DateTime? StartDate { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime? EndDate { get; set; }
-        public bool IsActive { get; internal set; }
-        public Guid UserId { get; set; }
-        public Guid SubscriptionId { get; set; }
+    [Key]
+    public Guid Id { get; set; }
 
-        [ForeignKey(nameof(SubscriptionId))]
-        [InverseProperty(nameof(Subscriptions.UserSubscriptions))]
-        public virtual Subscriptions Subscription { get; set; } = default!;
-        [ForeignKey(nameof(UserId))]
-        [InverseProperty(nameof(Users.UserSubscriptions))]
-        public virtual Users User { get; set; } = default!;
-    }
+    [StringLength(50)]
+    public string Title { get; set; } = null!;
+
+    public string? Description { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime CreateDate { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? StartDate { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? EndDate { get; set; }
+
+    public bool IsActive { get; set; }
+
+    public Guid UserId { get; set; }
+
+    public Guid SubscriptionId { get; set; }
+
+    [ForeignKey("SubscriptionId")]
+    [InverseProperty("UserSubscriptions")]
+    public virtual Subscriptions Subscription { get; set; } = null!;
+
+    [ForeignKey("UserId")]
+    [InverseProperty("UserSubscriptions")]
+    public virtual Users User { get; set; } = null!;
 }

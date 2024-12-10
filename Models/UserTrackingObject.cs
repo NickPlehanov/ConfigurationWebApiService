@@ -8,18 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationWebApiService.Models;
 
-public partial class Hotkeys
+public partial class UserTrackingObject
 {
     [Key]
     public Guid Id { get; set; }
 
-    [StringLength(80)]
     public string Title { get; set; } = null!;
 
-    public string? Description { get; set; }
-
-    public string Value { get; set; } = null!;
-
-    [InverseProperty("HotKey")]
-    public virtual ICollection<HotKeyConfigurations> HotKeyConfigurations { get; set; } = new List<HotKeyConfigurations>();
+    [InverseProperty("UserTrackingObject")]
+    public virtual ICollection<UserTrackingObjectEventSubscription> UserTrackingObjectEventSubscription { get; set; } = new List<UserTrackingObjectEventSubscription>();
 }

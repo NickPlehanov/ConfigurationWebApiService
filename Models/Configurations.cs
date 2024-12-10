@@ -4,73 +4,40 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
+using Microsoft.EntityFrameworkCore;
 
-#nullable enable
+namespace ConfigurationWebApiService.Models;
 
-namespace ConfigurationWebApiService.Models
+public partial class Configurations
 {
-    public partial class Configurations
-    {
-        public Configurations(Configurations conf, [CallerMemberName] string caller = "")
-        {
-            Id = Guid.NewGuid();
-            Title = conf.Title;
-            Description = conf.Description;
-            CreateDate = conf.CreateDate == DateTime.MinValue ? DateTime.Now : conf.CreateDate;
-            UpdateDate = caller.Contains("Add") ? null : DateTime.Now;
-            Version = caller.Contains("Add") ? 1 : conf.Version++;
-            ColourSchemaConfiguration = new HashSet<ColourSchemaConfiguration>();
-            FontConfiguration = new HashSet<FontConfiguration>();
-            HotKeyConfigurations = new HashSet<HotKeyConfigurations>();
-            UserConfiguration = new HashSet<UserConfiguration>();
-            WindowLocationConfiguration = new HashSet<WindowLocationConfiguration>();
-        }
-        public Configurations(string title, string description)
-        {
-            Id = Guid.NewGuid();
-            Title = title;
-            Description = description;
-            CreateDate = DateTime.Now;
-            UpdateDate = null;
-            Version = 1;
-            ColourSchemaConfiguration = new HashSet<ColourSchemaConfiguration>();
-            FontConfiguration = new HashSet<FontConfiguration>();
-            HotKeyConfigurations = new HashSet<HotKeyConfigurations>();
-            UserConfiguration = new HashSet<UserConfiguration>();
-            WindowLocationConfiguration = new HashSet<WindowLocationConfiguration>();
-        }
-        public Configurations()
-        {
-            ColourSchemaConfiguration = new HashSet<ColourSchemaConfiguration>();
-            FontConfiguration = new HashSet<FontConfiguration>();
-            HotKeyConfigurations = new HashSet<HotKeyConfigurations>();
-            UserConfiguration = new HashSet<UserConfiguration>();
-            WindowLocationConfiguration = new HashSet<WindowLocationConfiguration>();
-        }
+    [Key]
+    public Guid Id { get; set; }
 
-        [Key]
-        public Guid Id { get; internal set; }
-        [Required]
-        [StringLength(50)]
-        public string Title { get; set; } = default!;
-        public string? Description { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime CreateDate { get; internal set; }
-        [Column(TypeName = "datetime")]
-        public DateTime? UpdateDate { get; internal set; }
-        [IgnoreDataMember]
-        public int Version { get; internal set; }
-        [InverseProperty("Configuration")]
-        public virtual ICollection<ColourSchemaConfiguration> ColourSchemaConfiguration { get; internal set; }
-        [InverseProperty("Configuration")]
-        public virtual ICollection<FontConfiguration> FontConfiguration { get; internal set; }
-        [InverseProperty("Configuration")]
-        public virtual ICollection<HotKeyConfigurations> HotKeyConfigurations { get; internal set; }
-        [InverseProperty("Configuration")]
-        public virtual ICollection<UserConfiguration> UserConfiguration { get; internal set; }
-        [InverseProperty("Configuration")]
-        public virtual ICollection<WindowLocationConfiguration> WindowLocationConfiguration { get; internal set; }
-    }
+    [StringLength(50)]
+    public string Title { get; set; } = null!;
+
+    public string? Description { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime CreateDate { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? UpdateDate { get; set; }
+
+    public int Version { get; set; }
+
+    [InverseProperty("Configuration")]
+    public virtual ICollection<ColourSchemaConfiguration> ColourSchemaConfiguration { get; set; } = new List<ColourSchemaConfiguration>();
+
+    [InverseProperty("Configuration")]
+    public virtual ICollection<FontConfiguration> FontConfiguration { get; set; } = new List<FontConfiguration>();
+
+    [InverseProperty("Configuration")]
+    public virtual ICollection<HotKeyConfigurations> HotKeyConfigurations { get; set; } = new List<HotKeyConfigurations>();
+
+    [InverseProperty("Configuration")]
+    public virtual ICollection<UserConfiguration> UserConfiguration { get; set; } = new List<UserConfiguration>();
+
+    [InverseProperty("Configuration")]
+    public virtual ICollection<WindowLocationConfiguration> WindowLocationConfiguration { get; set; } = new List<WindowLocationConfiguration>();
 }

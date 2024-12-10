@@ -10,6 +10,16 @@ namespace ConfigurationWebApiService.Controllers
 {
     public interface IBaseActionsForControllers
     {
+        async void ObjectWasBeChanged<T>(object sender, EntityChangedEventArgs<T> e)
+        {
+            MessageForSubscribers messageForSubscribers = new();
+            if (e.Entity != null)
+            {
+                await messageForSubscribers.Send($"Сформировано событие типа {e.Action} для объекта типа {e.Entity.GetType().Name} с идентификатором {e.Entity.GetType().GetProperty("Id")?.GetValue(e)}", e?.Notes ?? string.Empty, BaseMessage.GetSubscribersForMessage([e.Action.ToString()], [e.Entity.GetType().Name.ToString()]));
+            }
+            else
+                await messageForSubscribers.Send(typeof(T).Name ?? string.Empty, e.Notes ?? string.Empty, BaseMessage.GetSubscribersForMessage([e.Action.ToString()], [typeof(T).Name]));
+        }
         public IEnumerable<T>? GetAll<T>() where T : class
         {
             ConfugurationManagerDbContext context = new();
@@ -35,14 +45,6 @@ namespace ConfigurationWebApiService.Controllers
             int res = context.SaveChanges();
             return res > 0;
         }
-
-        async void ObjectWasBeChanged<T>(object sender, EntityChangedEventArgs<T> e) 
-        {
-            MessageForSubscribers messageForSubscribers = new();
-            await messageForSubscribers.Send("", BaseMessage.GetSubscribersForMessage(""));
-            bool y = false;
-        }
-
         public virtual bool Update<T>(T entity) where T : class
         {
             ConfugurationManagerDbContext context = new();
@@ -62,15 +64,21 @@ namespace ConfigurationWebApiService.Controllers
         public virtual bool Remove<T>(Guid id) where T : class
         {
             ConfugurationManagerDbContext context = new();
-            context.Remove<T>(context.Find<T>(id));
-            context.SavingChanges += (sender, e) => ObjectWasBeChanged<T>(sender, new EntityChangedEventArgs<T>(context.Find<T>(id), EntityAction.Remove, string.Empty));
-            int res = context.SaveChanges();
+            int res = 0;
+            var obj = context.Find<T>(id);
+            if (obj != null)
+            {
+                context.Remove<T>(obj);
+                context.SavingChanges += (sender, e) => ObjectWasBeChanged<T>(sender, new EntityChangedEventArgs<T>(obj, EntityAction.Remove, string.Empty));
+                res = context.SaveChanges();
+            }
             return res > 0;
         }
         public virtual bool RemoveAll<T>() where T : class
         {
             ConfugurationManagerDbContext context = new();
             context.RemoveRange(context.Set<T>().AsEnumerable());
+            context.SavingChanges += (sender, e) => ObjectWasBeChanged<T>(sender, new EntityChangedEventArgs<T>(null, EntityAction.Remove, "Удаление всех объектов"));
             int res = context.SaveChanges();
             return res > 0;
         }
@@ -78,13 +86,14 @@ namespace ConfigurationWebApiService.Controllers
         {
             var propertyInfo = typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
             ConfugurationManagerDbContext context = new();
+            context.SavingChanges += (sender, e) => ObjectWasBeChanged<T>(sender, new EntityChangedEventArgs<T>(null, EntityAction.Remove, "Удаление всех объектов"));
             if (propertyInfo != null)
             {
                 context.Set<T>().RemoveRange(context.Set<T>().AsEnumerable().Where(x => propertyValue.Equals(propertyInfo.GetValue(x)?.ToString())));
-                return true;
+                return context.SaveChanges()>0;
             }
             else
-                return false;
+                return context.SaveChanges()>0;
         }
     }
 }
