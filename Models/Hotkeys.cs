@@ -11,22 +11,27 @@ namespace ConfigurationWebApiService.Models
 {
     public partial class Hotkeys
     {
+        public Hotkeys(Hotkeys hotkey)
+        {
+            Id = hotkey.Id == Guid.Empty ? Guid.NewGuid() : hotkey.Id; ;
+            Title = hotkey.Title;
+            Description = hotkey.Description;
+            Value = hotkey.Value;
+            HotKeyConfigurations = new HashSet<HotKeyConfigurations>();
+        }
         public Hotkeys()
         {
             HotKeyConfigurations = new HashSet<HotKeyConfigurations>();
         }
 
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; internal set; }
         [Required]
         [StringLength(80)]
         public string Title { get; set; } = default!;
         public string? Description { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime CreateDate { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime? UpdateDate { get; set; }
-        public bool IsActive { get; set; }
+        [Required]
+        public string Value { get; set; } = default!;
 
         [InverseProperty("HotKey")]
         public virtual ICollection<HotKeyConfigurations> HotKeyConfigurations { get; set; }

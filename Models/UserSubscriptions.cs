@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 #nullable enable
 
@@ -11,19 +12,35 @@ namespace ConfigurationWebApiService.Models
 {
     public partial class UserSubscriptions
     {
+        public UserSubscriptions(UserSubscriptions userSubscriptions, [CallerMemberName] string caller = "")
+        {
+            Id = userSubscriptions.Id == Guid.Empty ? Guid.NewGuid() : userSubscriptions.Id;
+            CreateDate = userSubscriptions.CreateDate == DateTime.MinValue ? DateTime.Now : userSubscriptions.CreateDate;
+            IsActive = caller.Contains("Add") ? true : userSubscriptions.IsActive;
+            StartDate = caller.Contains("Add") ? DateTime.Now : userSubscriptions.StartDate;
+            EndDate = caller.Contains("Add") ? DateTime.Now: userSubscriptions.EndDate;
+            Title = userSubscriptions.Title;
+            Description = userSubscriptions.Description;
+            UserId = userSubscriptions.UserId;
+            SubscriptionId  = userSubscriptions.SubscriptionId;
+        }
+        public UserSubscriptions()
+        {
+            
+        }
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; internal set; }
         [Required]
         [StringLength(50)]
         public string Title { get; set; } = default!;
         public string? Description { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; internal set; }
         [Column(TypeName = "datetime")]
         public DateTime? StartDate { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? EndDate { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; internal set; }
         public Guid UserId { get; set; }
         public Guid SubscriptionId { get; set; }
 

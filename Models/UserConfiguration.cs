@@ -11,6 +11,16 @@ namespace ConfigurationWebApiService.Models
 {
     public partial class UserConfiguration
     {
+        public UserConfiguration()
+        {
+            
+        }
+        public UserConfiguration(UserConfiguration userConfiguration)
+        {
+            Id = userConfiguration.Id == Guid.Empty ? Guid.NewGuid() : userConfiguration.Id;
+            UserId = userConfiguration.UserId;
+            ConfigurationId = userConfiguration.ConfigurationId;
+        }
         [Key]
         public Guid Id { get; set; }
         public Guid UserId { get; set; }

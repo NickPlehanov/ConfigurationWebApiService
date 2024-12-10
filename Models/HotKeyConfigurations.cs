@@ -4,15 +4,26 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.Net.Mime.MediaTypeNames;
 
 #nullable enable
 
 namespace ConfigurationWebApiService.Models
-{
+{    
     public partial class HotKeyConfigurations
     {
+        public HotKeyConfigurations()
+        {
+            
+        }
+        public HotKeyConfigurations(HotKeyConfigurations hotKeyConfiguration)
+        {
+            Id = hotKeyConfiguration.Id == Guid.Empty ? Guid.NewGuid() : hotKeyConfiguration.Id;
+            HotKeyId = hotKeyConfiguration.HotKeyId;
+            ConfigurationId = hotKeyConfiguration.ConfigurationId;
+        }
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; internal set; }
         public Guid HotKeyId { get; set; }
         public Guid ConfigurationId { get; set; }
 

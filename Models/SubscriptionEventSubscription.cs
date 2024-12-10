@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 #nullable enable
 
@@ -11,8 +12,18 @@ namespace ConfigurationWebApiService.Models
 {
     public partial class SubscriptionEventSubscription
     {
+        public SubscriptionEventSubscription()
+        {
+            
+        }
+        public SubscriptionEventSubscription(SubscriptionEventSubscription subscriptionEventSubscription)
+        {
+            Id = subscriptionEventSubscription.Id == Guid.Empty ? Guid.NewGuid() : subscriptionEventSubscription.Id;
+            SubscriptionId = subscriptionEventSubscription.SubscriptionId;
+            EventSubscriptionId= subscriptionEventSubscription.SubscriptionId;
+        }
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; internal set; }
         public Guid SubscriptionId { get; set; }
         public Guid EventSubscriptionId { get; set; }
 

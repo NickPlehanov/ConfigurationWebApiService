@@ -11,6 +11,16 @@ namespace ConfigurationWebApiService.Models
 {
     public partial class FontConfiguration
     {
+        public FontConfiguration()
+        {
+            
+        }
+        public FontConfiguration(FontConfiguration fontConfiguration)
+        {
+            Id = fontConfiguration.Id == Guid.Empty ? Guid.NewGuid() : fontConfiguration.Id;
+            FontId = fontConfiguration.FontId;
+            ConfigurationId = fontConfiguration.ConfigurationId;
+        }
         [Key]
         public Guid Id { get; set; }
         public Guid FontId { get; set; }

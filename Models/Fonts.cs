@@ -11,6 +11,13 @@ namespace ConfigurationWebApiService.Models
 {
     public partial class Fonts
     {
+        public Fonts(Fonts font)
+        {
+            Id = font.Id == Guid.Empty ? Guid.NewGuid() : font.Id;
+            Title = font.Title;
+            Description = font.Description;
+            Value = font.Value;
+        }
         public Fonts()
         {
             FontConfiguration = new HashSet<FontConfiguration>();

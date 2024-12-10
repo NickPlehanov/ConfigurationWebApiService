@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 #nullable enable
 
@@ -11,6 +12,20 @@ namespace ConfigurationWebApiService.Models
 {
     public partial class Users
     {
+        public Users(Users user, [CallerMemberName] string caller ="")
+        {
+            Id = user.Id == Guid.Empty ? Guid.NewGuid() : user.Id;
+            CreateDate = user.CreateDate == DateTime.MinValue ? DateTime.Now : user.CreateDate;
+            IsActive = caller.Contains("Add") ? true : user.IsActive;
+            UpdateDate = caller.Contains("Add") ? null : DateTime.Now;
+            LastName = user.LastName;
+            FirstName = user.FirstName;
+            MiddleName= user.MiddleName;
+            Login=user.Login;
+            PasswordHash = user.PasswordHash;//тут надо функцию
+            UserConfiguration = new HashSet<UserConfiguration>();
+            UserSubscriptions = new HashSet<UserSubscriptions>();
+        }
         public Users()
         {
             UserConfiguration = new HashSet<UserConfiguration>();
@@ -30,17 +45,17 @@ namespace ConfigurationWebApiService.Models
         [Required]
         [StringLength(10)]
         public string Login { get; set; } = default!;
-        [Required]
+        //[Required]
         public string PasswordHash { get; set; } = default!;
         [Column(TypeName = "datetime")]
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; internal set; }
         [Column(TypeName = "datetime")]
-        public DateTime? UpdateDate { get; set; }
-        public bool IsActive { get; set; }
+        public DateTime? UpdateDate { get; internal set; }
+        public bool IsActive { get; internal set; }
 
         [InverseProperty("User")]
-        public virtual ICollection<UserConfiguration> UserConfiguration { get; set; }
+        public virtual ICollection<UserConfiguration> UserConfiguration { get; internal set; }
         [InverseProperty("User")]
-        public virtual ICollection<UserSubscriptions> UserSubscriptions { get; set; }
+        public virtual ICollection<UserSubscriptions> UserSubscriptions { get; internal set; }
     }
 }
