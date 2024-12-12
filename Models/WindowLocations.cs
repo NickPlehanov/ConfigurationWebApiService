@@ -10,6 +10,19 @@ namespace ConfigurationWebApiService.Models;
 
 public partial class WindowLocations
 {
+    public WindowLocations(WindowLocations wl)
+    {
+        Id = wl.Id == Guid.Empty ? Guid.NewGuid() : wl.Id;
+        Title = wl.Title;
+        Description = wl.Description;
+        X = wl.X;
+        Y = wl.Y;
+        WindowId = wl.WindowId;
+    }
+    public WindowLocations()
+    {
+
+    }
     [Key]
     public Guid Id { get; set; }
 

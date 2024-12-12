@@ -10,6 +10,16 @@ namespace ConfigurationWebApiService.Models;
 
 public partial class WindowLocationConfiguration
 {
+    public WindowLocationConfiguration(WindowLocationConfiguration wlc)
+    {
+        Id = wlc.Id == Guid.Empty ? Guid.NewGuid() : wlc.Id;
+        WindowLocationId = wlc.WindowLocationId;
+        ConfigurationId = wlc.ConfigurationId;
+    }
+    public WindowLocationConfiguration()
+    {
+
+    }
     [Key]
     public Guid Id { get; set; }
 

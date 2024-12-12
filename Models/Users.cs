@@ -4,40 +4,102 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Metrics;
+using System.Runtime.CompilerServices;
+using ConfigurationWebApiService.CRUDModels.Users;
+using ConfigurationWebApiService.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationWebApiService.Models;
 
 public partial class Users
 {
+    //public static implicit|explicit operator Тип_в_который_надо_преобразовать(исходный_тип param)
+    //{
+    //    // логика преобразования
+    //}
+    public static implicit operator UserEditRemoveModel(Users param)
+    {
+        return new UserEditRemoveModel()
+        {
+            //FirstName = param.FirstName,
+            //LastName = param.LastName,
+            //MiddleName = param.MiddleName,
+            //Login = param.Login,
+            Id = param.Id,
+            //CreateDate = param.CreateDate,
+            //UpdateDate = param.UpdateDate,
+            //IsActive = param.IsActive
+        };
+    }
+    //public static implicit operator UserEditRemoveModel(Users param)
+    //{
+    //    return new UserEditRemoveModel()
+    //    {
+    //        FirstName = param.FirstName,
+    //        LastName = param.LastName,
+    //        MiddleName = param.MiddleName,
+    //        Login = param.Login,
+    //        Id = param.Id,
+    //        CreateDate = param.CreateDate,
+    //        UpdateDate = param.UpdateDate,
+    //        IsActive = param.IsActive
+    //    };
+    //}
+
+    //public Users(Users user, [CallerMemberName] string caller = "")
+    //{
+    //    Id = user.Id == Guid.Empty ? Guid.NewGuid() : user.Id;
+    //    CreateDate = user.CreateDate == DateTime.MinValue ? DateTime.Now : user.CreateDate;
+    //    IsActive = caller.Contains("Add") ? true : user.IsActive;
+    //    UpdateDate = caller.Contains("Add") ? null : DateTime.Now;
+    //    LastName = user.LastName;
+    //    FirstName = user.FirstName;
+    //    MiddleName = user.MiddleName;
+    //    Login = user.Login;
+    //    PasswordHash = user.PasswordHash;//тут надо функцию
+    //    UserConfiguration = new HashSet<UserConfiguration>();
+    //    UserSubscriptions = new HashSet<UserSubscriptions>();
+    //}
+    public Users()
+    {
+        UserConfiguration = new HashSet<UserConfiguration>();
+        UserSubscriptions = new HashSet<UserSubscriptions>();
+    }
     [Key]
     public Guid Id { get; set; }
 
-    [StringLength(80)]
+    [StringLength(80,MinimumLength =1)]
+    [Required]
     public string LastName { get; set; } = null!;
 
-    [StringLength(80)]
+    [StringLength(80, MinimumLength = 1)]
+    [Required]
     public string FirstName { get; set; } = null!;
 
     [StringLength(80)]
     public string? MiddleName { get; set; }
 
-    [StringLength(10)]
+    [StringLength(10, MinimumLength = 3)]
+    [Required]
     public string Login { get; set; } = null!;
 
     public string PasswordHash { get; set; } = null!;
 
     [Column(TypeName = "datetime")]
+    [Date]
     public DateTime CreateDate { get; set; }
 
     [Column(TypeName = "datetime")]
+    [Date]
     public DateTime? UpdateDate { get; set; }
 
     public bool IsActive { get; set; }
 
     [InverseProperty("User")]
-    public virtual ICollection<UserConfiguration> UserConfiguration { get; set; } = new List<UserConfiguration>();
+    public virtual ICollection<UserConfiguration> UserConfiguration { get; internal set; } = new List<UserConfiguration>();
 
     [InverseProperty("User")]
-    public virtual ICollection<UserSubscriptions> UserSubscriptions { get; set; } = new List<UserSubscriptions>();
+    public virtual ICollection<UserSubscriptions> UserSubscriptions { get; internal set; } = new List<UserSubscriptions>();
+
 }

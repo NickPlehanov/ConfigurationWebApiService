@@ -10,6 +10,18 @@ namespace ConfigurationWebApiService.Models;
 
 public partial class Hotkeys
 {
+    public Hotkeys(Hotkeys hotkey)
+    {
+        Id = hotkey.Id == Guid.Empty ? Guid.NewGuid() : hotkey.Id; ;
+        Title = hotkey.Title;
+        Description = hotkey.Description;
+        Value = hotkey.Value;
+        HotKeyConfigurations = new HashSet<HotKeyConfigurations>();
+    }
+    public Hotkeys()
+    {
+        HotKeyConfigurations = new HashSet<HotKeyConfigurations>();
+    }
     [Key]
     public Guid Id { get; set; }
 

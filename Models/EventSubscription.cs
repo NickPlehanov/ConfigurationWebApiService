@@ -4,12 +4,25 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationWebApiService.Models;
 
 public partial class EventSubscription
 {
+    public EventSubscription(EventSubscription es, [CallerMemberName] string caller = "")
+    {
+        Id = es.Id == Guid.Empty ? Guid.NewGuid() : es.Id;
+        CreateDate = es.CreateDate == DateTime.MinValue ? DateTime.Now : es.CreateDate;
+        UpdateDate = caller.Contains("Add") ? null : DateTime.Now;
+        Title = es.Title;
+        Description = es.Description;
+    }
+    public EventSubscription()
+    {
+        SubscriptionEventSubscription = new HashSet<SubscriptionEventSubscription>();
+    }
     [Key]
     public Guid Id { get; set; }
 

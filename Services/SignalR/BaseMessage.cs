@@ -1,7 +1,7 @@
 ﻿using ConfigurationWebApiService.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConfigurationWebApiService.Services
+namespace ConfigurationWebApiService.Services.SignalR
 {
     public static class BaseMessage
     {

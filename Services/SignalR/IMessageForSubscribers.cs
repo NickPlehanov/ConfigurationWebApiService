@@ -1,4 +1,4 @@
-﻿namespace ConfigurationWebApiService.Services
+﻿namespace ConfigurationWebApiService.Services.SignalR
 {
     public interface IMessageForSubscribers
     {

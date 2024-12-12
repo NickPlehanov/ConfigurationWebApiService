@@ -1,5 +1,10 @@
+using ConfigurationWebApiService.Controllers;
 using ConfigurationWebApiService.Data;
 using ConfigurationWebApiService.Services;
+using ConfigurationWebApiService.Services.SignalR;
+using ConfigurationWebApiService.Services.Users;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +15,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddSignalR();
 builder.Services
     .AddSignalR(hubOptions =>
     {
@@ -24,6 +28,15 @@ builder.Services
     });
 
 builder.Services.AddSqlServer<ConfugurationManagerDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+//builder.Services.AddDbContext<ConfugurationManagerDbContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+//    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+//});
+builder.Services.AddScoped<ConfugurationManagerDbContext>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

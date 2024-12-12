@@ -4,12 +4,35 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationWebApiService.Models;
 
 public partial class Configurations
 {
+    public Configurations(Configurations conf, [CallerMemberName] string caller = "")
+    {
+        Id = Guid.NewGuid();
+        Title = conf.Title;
+        Description = conf.Description;
+        CreateDate = conf.CreateDate == DateTime.MinValue ? DateTime.Now : conf.CreateDate;
+        UpdateDate = caller.Contains("Add") ? null : DateTime.Now;
+        Version = caller.Contains("Add") ? 1 : conf.Version++;
+        ColourSchemaConfiguration = new HashSet<ColourSchemaConfiguration>();
+        FontConfiguration = new HashSet<FontConfiguration>();
+        HotKeyConfigurations = new HashSet<HotKeyConfigurations>();
+        UserConfiguration = new HashSet<UserConfiguration>();
+        WindowLocationConfiguration = new HashSet<WindowLocationConfiguration>();
+    }
+    public Configurations()
+    {
+        ColourSchemaConfiguration = new HashSet<ColourSchemaConfiguration>();
+        FontConfiguration = new HashSet<FontConfiguration>();
+        HotKeyConfigurations = new HashSet<HotKeyConfigurations>();
+        UserConfiguration = new HashSet<UserConfiguration>();
+        WindowLocationConfiguration = new HashSet<WindowLocationConfiguration>();
+    }
     [Key]
     public Guid Id { get; set; }
 

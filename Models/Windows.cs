@@ -10,6 +10,17 @@ namespace ConfigurationWebApiService.Models;
 
 public partial class Windows
 {
+    public Windows(Windows window)
+    {
+        Id = window.Id == Guid.Empty ? Guid.NewGuid() : window.Id;
+        Title = window.Title;
+        Handler = window.Handler;
+        WindowLocations = new HashSet<WindowLocations>();
+    }
+    public Windows()
+    {
+        WindowLocations = new HashSet<WindowLocations>();
+    }
     [Key]
     public Guid Id { get; set; }
 

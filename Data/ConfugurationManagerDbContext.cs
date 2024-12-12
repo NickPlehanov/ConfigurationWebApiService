@@ -10,15 +10,6 @@ namespace ConfigurationWebApiService.Data;
 
 public partial class ConfugurationManagerDbContext : DbContext
 {
-    public event EventHandler<EntityChangedEventArgs<object>> SavingChanges;
-
-    public override int SaveChanges(bool acceptAllChangesOnSuccess)
-    {
-        var args = new EntityChangedEventArgs<object>();
-        SavingChanges?.Invoke(this, args);
-
-        return base.SaveChanges(acceptAllChangesOnSuccess);
-    }
     public ConfugurationManagerDbContext()
     {
     }

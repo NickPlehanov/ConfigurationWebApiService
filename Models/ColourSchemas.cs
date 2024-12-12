@@ -10,6 +10,18 @@ namespace ConfigurationWebApiService.Models;
 
 public partial class ColourSchemas
 {
+    public ColourSchemas(ColourSchemas cs)
+    {
+        Id = cs.Id == Guid.Empty ? Guid.NewGuid() : cs.Id;
+        Title = cs.Title;
+        Description = cs.Description;
+        Value = cs.Value;
+
+    }
+    public ColourSchemas()
+    {
+        ColourSchemaConfiguration = new HashSet<ColourSchemaConfiguration>();
+    }
     [Key]
     public Guid Id { get; set; }
 

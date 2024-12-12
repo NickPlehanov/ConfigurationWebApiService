@@ -10,6 +10,16 @@ namespace ConfigurationWebApiService.Models;
 
 public partial class SubscriptionEventSubscription
 {
+    public SubscriptionEventSubscription()
+    {
+
+    }
+    public SubscriptionEventSubscription(SubscriptionEventSubscription subscriptionEventSubscription)
+    {
+        Id = subscriptionEventSubscription.Id == Guid.Empty ? Guid.NewGuid() : subscriptionEventSubscription.Id;
+        SubscriptionId = subscriptionEventSubscription.SubscriptionId;
+        EventSubscriptionId = subscriptionEventSubscription.SubscriptionId;
+    }
     [Key]
     public Guid Id { get; set; }
 

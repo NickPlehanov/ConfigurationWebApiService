@@ -4,12 +4,23 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationWebApiService.Models;
 
 public partial class ColourSchemaConfiguration
 {
+    public ColourSchemaConfiguration(ColourSchemaConfiguration csc, [CallerMemberName] string caller = "")
+    {
+        Id = csc.Id == Guid.Empty ? Guid.NewGuid() : csc.Id;
+        ColourSchemaId = csc.ColourSchemaId;
+        ConfigurationId = csc.ConfigurationId;
+    }
+    public ColourSchemaConfiguration()
+    {
+
+    }
     [Key]
     public Guid Id { get; set; }
 

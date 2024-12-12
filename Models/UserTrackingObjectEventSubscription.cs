@@ -4,12 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationWebApiService.Models;
 
 public partial class UserTrackingObjectEventSubscription
 {
+    public UserTrackingObjectEventSubscription()
+    {
+    }
+    public UserTrackingObjectEventSubscription(UserTrackingObjectEventSubscription utoes, [CallerMemberName] string caller = "")
+    {
+        Id = utoes.Id == Guid.Empty ? Guid.NewGuid() : utoes.Id;
+        UserTrackingObjectId = utoes.UserTrackingObjectId;
+        EventSubscriptionId = utoes.EventSubscriptionId;
+    }
     [Key]
     public Guid Id { get; set; }
 
