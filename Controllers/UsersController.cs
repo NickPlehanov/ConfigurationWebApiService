@@ -29,11 +29,17 @@ namespace ConfigurationWebApiService.Controllers
         /// Получение списка всех пользователей
         /// </summary>
         /// <returns>Список пользователей</returns>
-        [HttpGet("GetListUser")]
-        //public IEnumerable<UserEditRemoveModel>? GetListUser()
-        public ResponseModel GetListUser()
+        [HttpGet("GetListUsers")]
+        public ActionResult<IEnumerable<UserEditRemoveModel>> GetListUsers()
         {
-            return _userService.GetUsers();
+            try
+            {
+                return Ok(_userService.GetUsers());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
@@ -42,9 +48,16 @@ namespace ConfigurationWebApiService.Controllers
         /// <param name="id">Идентификатор пользователя</param>
         /// <returns>Пользователь</returns>
         [HttpGet("GetById")]
-        public ResponseModel GetById(Guid id)
+        public ActionResult<UserEditRemoveModel> GetById(Guid id)
         {
-            return _userService.GetById(id);
+            try
+            {
+                return Ok(_userService.GetById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         /// <summary>
         /// Добавление пользователя
@@ -52,10 +65,16 @@ namespace ConfigurationWebApiService.Controllers
         /// <param name="user">Модель объекта пользователя</param>
         /// <returns>true - если добавление прошло успешно и false - в обратном случае</returns>
         [HttpPost("AddUser")]
-        public OkResult AddUser(Users user)
+        public ActionResult<Guid?> AddUser(Users user)
         {
-            _userService.Add(user);
-            return Ok();
+            try
+            {
+                return Ok(_userService.Add(user));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
@@ -64,10 +83,16 @@ namespace ConfigurationWebApiService.Controllers
         /// <param name = "user" > Модель объекта пользователя</param>
         /// <returns>true - если добавление прошло успешно и false - в обратном случае</returns>
         [HttpPost("EditUser")]
-        public OkResult EditUser(Users user)
+        public ActionResult<bool> EditUser(Users user)
         {
-            _userService.Update(user);
-            return Ok();
+            try
+            {
+                return Ok(_userService.Update(user));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
@@ -76,10 +101,16 @@ namespace ConfigurationWebApiService.Controllers
         /// <param name="id">Идентификатор пользователя</param>
         /// <returns>true - если добавление прошло успешно и false - в обратном случае</returns>
         [HttpGet("DeleteUser")]
-        public OkResult DeleteUser(Guid id)
+        public ActionResult<bool> DeleteUser(Guid id)
         {
-            _userService.Delete(id);
-            return Ok();
+            try
+            {
+                return Ok(_userService.Delete(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

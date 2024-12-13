@@ -13,12 +13,10 @@ namespace ConfigurationWebApiService.Services.Users
         {
             _iUserRepository = iUserRepository;
         }
-        public ResponseModel GetById(Guid id)
+        public UserEditRemoveModel GetById(Guid id)
         {
-            var resp= new ResponseModel();
             var user = _iUserRepository.GetById(id);
-            if (user == null) return resp;
-            resp.Value= new UserEditRemoveModel()
+            return user != null ? new UserEditRemoveModel()
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -26,19 +24,12 @@ namespace ConfigurationWebApiService.Services.Users
                 Login = user.Login,
                 Id = user.Id,
                 IsActive = user.IsActive,
-            };
-            resp.StatusCode = 1;
-            resp.Message = "OK";
-            return resp;
+            } : new UserEditRemoveModel();
         }
 
-        public ResponseModel GetUsers()
+        public IEnumerable<UserEditRemoveModel> GetUsers()
         {
-            var resp = new ResponseModel();
-            var entityUsers = _iUserRepository.GetAll();
-            if (entityUsers == null) return resp;
-            if(!entityUsers.Any()) return resp;
-            resp.Value=entityUsers.Select(x => new UserEditRemoveModel()
+            return _iUserRepository.GetAll().Select(x => new UserEditRemoveModel()
             {
                 FirstName = x.FirstName,
                 LastName = x.LastName,
@@ -46,17 +37,13 @@ namespace ConfigurationWebApiService.Services.Users
                 Login = x.Login,
                 Id = x.Id,
                 IsActive = x.IsActive,
-            });
-            resp.StatusCode = resp.Value != null ? 1:-1;
-            resp.Message= resp.Value!=null ? "OK": "ERROR";
-            return resp;
+            }).AsEnumerable();
         }
 
-        public ResponseModel Add(UserBase userAddModel)
+        public Guid? Add(UserBase userAddModel)
         {
-            var resp = new ResponseModel();
             if (userAddModel == null)
-                return resp;
+                return null;
             ModelUsers user = new()
             {
                 Id = Guid.NewGuid(),
@@ -69,47 +56,36 @@ namespace ConfigurationWebApiService.Services.Users
                 UpdateDate = userAddModel.UpdateDate,
                 IsActive = userAddModel.IsActive
             };
-            List<ValidationResult> validationResults;
-            if (!IBaseServiceLogic<ModelUsers>.ModelValidator(user, out validationResults))
+            if (!IBaseServiceLogic<ModelUsers>.ModelValidator(user, out List<ValidationResult> validationResults))
             {
-                resp.Error = validationResults;
-                return resp;
+                //TODO: логировать надо
+                return null;
             }
-            var result = _iUserRepository.Add(user);
-            resp.Value=result;
-            resp.Message = "OK";
-            resp.StatusCode = 1;
-            return resp;
+            return _iUserRepository.Add(user);
         }
 
-        ResponseModel IUserService.Delete(Guid id)
+        bool IUserService.Delete(Guid id)
         {
-            var resp = new ResponseModel();
             ModelUsers? findedUser = _iUserRepository.GetById(id);
             if (findedUser == null)
             {
-                resp.Error = $"Пользователь с Id = {id} не найден.";
-                return resp;
+                return false;
             }
             _iUserRepository.Delete(id);
-            resp.Message = "OK";
-            resp.StatusCode = 1;
-            return resp;
+            return true;
         }
 
-        ResponseModel IUserService.Update(UserEditRemoveModel userUpdateModel)
+        bool IUserService.Update(UserEditRemoveModel userUpdateModel)
         {
             var resp = new ResponseModel();
             if (userUpdateModel == null)
             {
-                resp.Error = $"Пустая модель для обновления пользователя";
-                return resp;
+                return false;
             }
             ModelUsers? findedUser = _iUserRepository.GetById(userUpdateModel.Id);
             if (findedUser == null)
             {
-                resp.Error = $"Пользователь с Id = {userUpdateModel.Id} не найден.";
-                return resp;
+                return false;
             }
             ModelUsers user = new()
             {
@@ -123,16 +99,12 @@ namespace ConfigurationWebApiService.Services.Users
                 UpdateDate = DateTime.Now,
                 IsActive = userUpdateModel.IsActive == findedUser.IsActive ? userUpdateModel.IsActive : findedUser.IsActive,
             };
-            List<ValidationResult> validationResults;
-            if (!IBaseServiceLogic<ModelUsers>.ModelValidator(user, out validationResults))
+            if (!IBaseServiceLogic<ModelUsers>.ModelValidator(user, out List<ValidationResult> validationResults))
             {
-                resp.Error = validationResults;
-                return resp;
+                return false;
             }
             _iUserRepository.Update(user);
-            resp.Message = "OK";
-            resp.StatusCode = 1;
-            return resp;
+            return true;
         }
     }
 }

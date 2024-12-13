@@ -21,16 +21,10 @@ namespace ConfigurationWebApiService.Controllers
         /// Получение списка всех пользователей
         /// </summary>
         /// <returns>Список пользователей</returns>
-        [HttpGet("GetListColourSchemaConfiguration")]
-        //public IEnumerable<UserEditRemoveModel>? GetListUser()
-        public IEnumerable<ColourSchemaConfiguration>? GetListUser()
-        {
-            return Service.GetAll();
-        }
-        //[HttpGet("GetById")]
-        //public ColourSchemaConfiguration? GetById(Guid id)
+        //[HttpGet("GetListColourSchemaConfiguration")]
+        //public IEnumerable<ColourSchemaConfiguration>? GetListUser()
         //{
-        //    return Service.GetById(id);
+        //    return Service.GetAll();
         //}
     }
 }
