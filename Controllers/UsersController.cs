@@ -1,24 +1,15 @@
 ﻿using ConfigurationWebApiService.CRUDModels;
 using ConfigurationWebApiService.CRUDModels.Users;
-using ConfigurationWebApiService.Data;
 using ConfigurationWebApiService.Models;
 using ConfigurationWebApiService.Services.Users;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ConfigurationWebApiService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController(IUserService userService) : ControllerBase
     {
-        private readonly IUserService _userService;
-        public UsersController(IUserService userService)
-        {
-            _userService = userService;
-        }
         //private readonly ITService<Users> _userService;
         //public UsersController(ITService<Users> userService)
         //{
@@ -31,9 +22,19 @@ namespace ConfigurationWebApiService.Controllers
         /// <returns>Список пользователей</returns>
         [HttpGet("GetListUser")]
         //public IEnumerable<UserEditRemoveModel>? GetListUser()
-        public ResponseModel GetListUser()
+        public ActionResult<ResponseModel<IList<UserEditRemoveModel>>> GetListUser()
         {
-            return _userService.GetUsers();
+            var response = new ResponseModel<IList<UserEditRemoveModel>>();
+            try
+            {
+                response.Value = userService.GetUsers();
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                response.Error = e.Message;
+                return BadRequest(response);
+            }
         }
 
         /// <summary>
@@ -42,20 +43,53 @@ namespace ConfigurationWebApiService.Controllers
         /// <param name="id">Идентификатор пользователя</param>
         /// <returns>Пользователь</returns>
         [HttpGet("GetById")]
-        public ResponseModel GetById(Guid id)
+        public ActionResult<ResponseModel<UserEditRemoveModel>> GetById(Guid id)
         {
-            return _userService.GetById(id);
+            var result = new ResponseModel<UserEditRemoveModel>();
+            try
+            {
+                result.Value = userService.GetById(id);
+                result.StatusCode = 200;
+                return Ok(result);
+            }
+            catch (InvalidOperationException e)
+            {
+                result.Error = "Пользователь не найден";
+                return BadRequest(e);
+            }
+            catch (ArgumentNullException)
+            {
+                return NotFound(result);
+            }
         }
+
         /// <summary>
         /// Добавление пользователя
         /// </summary>
         /// <param name="user">Модель объекта пользователя</param>
         /// <returns>true - если добавление прошло успешно и false - в обратном случае</returns>
         [HttpPost("AddUser")]
-        public OkResult AddUser(Users user)
+        public ActionResult<ResponseModel<Guid>> AddUser(Users user)
         {
-            _userService.Add(user);
-            return Ok();
+            var resp = new ResponseModel<Guid>();
+            if (!ModelState.IsValid)
+            {
+                resp.Error = ModelState.Select(x => x.Value?.Errors)
+                    .Where(y => y != null && y.Count > 0)
+                    .ToList();
+                return BadRequest(resp);
+            }
+
+            try
+            {
+                resp.Value = userService.Add(user);
+                return Ok(resp);
+            }
+            catch (Exception e)
+            {
+                resp.Error = e.Message;
+                return BadRequest(resp);
+            }
         }
 
         /// <summary>
@@ -64,10 +98,19 @@ namespace ConfigurationWebApiService.Controllers
         /// <param name = "user" > Модель объекта пользователя</param>
         /// <returns>true - если добавление прошло успешно и false - в обратном случае</returns>
         [HttpPost("EditUser")]
-        public OkResult EditUser(Users user)
+        public ActionResult<ResponseModel<bool>> EditUser(Users user)
         {
-            _userService.Update(user);
-            return Ok();
+            ResponseModel<bool> response = new ResponseModel<bool>();
+            try
+            {
+                response.Value = userService.Update(user);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                response.Error = e.Message;
+                return BadRequest(response);
+            }
         }
 
         /// <summary>
@@ -76,10 +119,19 @@ namespace ConfigurationWebApiService.Controllers
         /// <param name="id">Идентификатор пользователя</param>
         /// <returns>true - если добавление прошло успешно и false - в обратном случае</returns>
         [HttpGet("DeleteUser")]
-        public OkResult DeleteUser(Guid id)
+        public ActionResult DeleteUser(Guid id)
         {
-            _userService.Delete(id);
-            return Ok();
+            var response = new ResponseModel<bool>();
+            try
+            {
+                userService.Delete(id);
+            }
+            catch (Exception e)
+            {
+                response.Error = e.Message;
+            }
+
+            return Ok(response);
         }
     }
 }

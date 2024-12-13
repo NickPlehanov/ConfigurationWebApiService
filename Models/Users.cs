@@ -8,11 +8,12 @@ using System.Diagnostics.Metrics;
 using System.Runtime.CompilerServices;
 using ConfigurationWebApiService.CRUDModels.Users;
 using ConfigurationWebApiService.Helpers;
+using ConfigurationWebApiService.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationWebApiService.Models;
 
-public partial class Users
+public partial class Users : Entity
 {
     //public static implicit|explicit operator Тип_в_который_надо_преобразовать(исходный_тип param)
     //{
@@ -66,9 +67,7 @@ public partial class Users
         UserConfiguration = new HashSet<UserConfiguration>();
         UserSubscriptions = new HashSet<UserSubscriptions>();
     }
-    [Key]
-    public Guid Id { get; set; }
-
+  
     [StringLength(80,MinimumLength =1)]
     [Required]
     public string LastName { get; set; } = null!;
@@ -78,7 +77,7 @@ public partial class Users
     public string FirstName { get; set; } = null!;
 
     [StringLength(80)]
-    public string? MiddleName { get; set; }
+    public string MiddleName { get; set; }
 
     [StringLength(10, MinimumLength = 3)]
     [Required]

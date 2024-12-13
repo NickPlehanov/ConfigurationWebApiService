@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationWebApiService.Services
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : Entity
     {
         private readonly ConfugurationManagerDbContext _context;
 
@@ -12,16 +12,13 @@ namespace ConfigurationWebApiService.Services
         {
             _context = context;
         }
-        public Guid? Add(T entity)
+        public Guid Add(T entity)
         {
             var addedEntity = _context.Set<T>().Add(entity);
             Save();
-            if (addedEntity != null)
-            {
+            
                 return Guid.Parse(addedEntity.Entity.GetType().GetProperty("Id").GetValue(addedEntity.Entity).ToString());
-            }
-            else
-                return null;
+            
         }
 
         public void Delete(Guid id)
