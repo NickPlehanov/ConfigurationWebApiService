@@ -7,7 +7,7 @@ namespace ConfigurationWebApiService.Services.Users
     public interface IUserService
     {
         IEnumerable<UserEditRemoveModel> GetUsers();
-        UserEditRemoveModel GetById(Guid id);
+        UserEditRemoveModel? GetById(Guid id);
         Guid? Add(UserBase user);
         bool Update(UserEditRemoveModel user);
         bool Delete(Guid id);

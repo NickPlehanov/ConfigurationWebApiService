@@ -13,7 +13,7 @@ namespace ConfigurationWebApiService.Services.Users
         {
             _iUserRepository = iUserRepository;
         }
-        public UserEditRemoveModel GetById(Guid id)
+        public UserEditRemoveModel? GetById(Guid id)
         {
             var user = _iUserRepository.GetById(id);
             return user != null ? new UserEditRemoveModel()
@@ -24,7 +24,7 @@ namespace ConfigurationWebApiService.Services.Users
                 Login = user.Login,
                 Id = user.Id,
                 IsActive = user.IsActive,
-            } : new UserEditRemoveModel();
+            } : null;
         }
 
         public IEnumerable<UserEditRemoveModel> GetUsers()
