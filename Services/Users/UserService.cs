@@ -1,5 +1,6 @@
 ﻿using ConfigurationWebApiService.CRUDModels;
 using ConfigurationWebApiService.CRUDModels.Users;
+using ConfigurationWebApiService.Models;
 using ConfigurationWebApiService.Services.SignalR;
 using System.ComponentModel.DataAnnotations;
 using ModelUsers = ConfigurationWebApiService.Models.Users;
@@ -61,6 +62,7 @@ namespace ConfigurationWebApiService.Services.Users
                 //TODO: логировать надо
                 return null;
             }
+            IBaseServiceLogic<ModelUsers>.ObjectWasBeChanged<ModelUsers>(new Models.EntityChangedEventArgs<ModelUsers>(user, EntityAction.Add, ""));
             return _iUserRepository.Add(user);
         }
 
@@ -72,6 +74,7 @@ namespace ConfigurationWebApiService.Services.Users
                 return false;
             }
             _iUserRepository.Delete(id);
+            IBaseServiceLogic<ModelUsers>.ObjectWasBeChanged<ModelUsers>(new Models.EntityChangedEventArgs<ModelUsers>(null, EntityAction.Remove, ""));
             return true;
         }
 
@@ -104,6 +107,7 @@ namespace ConfigurationWebApiService.Services.Users
                 return false;
             }
             _iUserRepository.Update(user);
+            IBaseServiceLogic<ModelUsers>.ObjectWasBeChanged<ModelUsers>(new Models.EntityChangedEventArgs<ModelUsers>(user, EntityAction.Update, ""));
             return true;
         }
     }

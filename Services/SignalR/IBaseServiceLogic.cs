@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ConfigurationWebApiService.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace ConfigurationWebApiService.Services.SignalR
 {
@@ -14,6 +15,14 @@ namespace ConfigurationWebApiService.Services.SignalR
             }
             else
                 return true;
+        }
+        public static void ObjectWasBeChanged<T>(EntityChangedEventArgs<T> e)
+        {
+            MessageForSubscribers messageForSubscribers = new();
+            if (e.Entity != null && e.AffectedRows > 0)
+            {
+                messageForSubscribers.Send($"Сформировано событие типа {e.Action} для объекта типа {e.Entity.GetType().Name} с идентификатором {e.Entity.GetType().GetProperty("Id")?.GetValue(e.Entity)}", e?.Notes ?? string.Empty, BaseMessage.GetSubscribersForMessage([e.Action.ToString()], [e.Entity.GetType().Name.ToString()]));
+            }
         }
     }
 }
